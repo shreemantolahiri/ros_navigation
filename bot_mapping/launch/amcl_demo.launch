@@ -1,0 +1,18 @@
+<launch>
+
+  <!-- Run the map server -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"></node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <param name="use_gui" value="True"/></node>
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find bot_mapping)/rviz/rviz.rviz" />
+
+  <arg name="map_file" default="$(find bot_mapping)/maps/world_map.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!--- Run AMCL -->
+  <include file="$(find bot_mapping)/launch/amcl.launch" />
+
+  <!--- Run Move Base -->
+  <include file="$(find bot_mapping)/launch/move_base.launch" />
+
+</launch>
